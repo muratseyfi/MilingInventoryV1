@@ -43,7 +43,7 @@ ROOT_URLCONF = 'milinginventory.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,7 +65,7 @@ WSGI_APPLICATION = 'milinginventory.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'milinginventoryV1',
+        'NAME': 'miling_inventory_V1',
         'USER': 'postgres',
         'PASSWORD': 'Mur1986at!',
         'HOST': 'localhost'
@@ -113,3 +113,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICFILES_DIRS = [
+    BASE_DIR/ "static"
+]
+
+STATIC_ROOT = (BASE_DIR/"asert/")
