@@ -19,3 +19,7 @@ def register(request):
 def logout_user(request):
     logout(request)
     return render(request, 'user/logout.html')
+
+
+def profile(request):
+    return render(request, 'user/profile.html')
