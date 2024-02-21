@@ -5,6 +5,7 @@ from .models import Product, Order
 from .forms import ProductForm, OrderForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.db import connection
 
 @login_required
 def index(request):
@@ -121,10 +122,33 @@ def order(request):
     orders_count = orders.count()
     workers_count = User.objects.all().count()
     products_count = Product.objects.all().count()
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.staff = request.user 
+            instance.save()
+            return redirect('dashboard-order')
+    else:
+        form = OrderForm()
     context = {
         'orders': orders,
         'workers_count': workers_count,
         'orders_count': orders_count,
-        'products_count': products_count
+        'products_count': products_count,
+        'form': form
     }
     return render(request, 'dashboard/order.html', context)
+
+
+@login_required
+def order_approve(request, pk):
+    item = Order.objects.get(id=pk)
+    context = {
+        'order': item
+    }
+    if request.method == 'POST':
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE dashboard_order SET status=true WHERE id =  %s", [pk])
+        return redirect('dashboard-order')
+    return render(request, 'dashboard/order_approve.html', context)

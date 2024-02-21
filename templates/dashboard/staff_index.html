@@ -28,26 +28,35 @@
                         Orders Records
                     </div>
                     <div class="card-body">
-                        <table id="staffIndexTable" class="table bg-white table-striped table-hover table-bordered">
-                            <thead class="table-success text-white">
-                                <tr>
+                        <table id="staffIndexTable" class="table table-striped table-hover table-bordered display nowrap" style="width:100%">
+                            <thead class="table-success">
+                                <tr class="text-white">
+                                    <th><input type="checkbox" id="checkall" /></th>
                                     <th scope="col">Product</th>
                                     <th scope="col">Category</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Date</th>
+                                    <th scope="col">P.Qty</th>
+                                    <th scope="col">O.Qty</th>
+                                    <th scope="col">Order by</th>
+                                    <th scope="col">Order Date</th>
+                                    <th scope="col">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for order in orders %}
                                     {% if order.staff == user %}
                                         <tr>
-                                            <td>{{ order.product.name }}</td>
+                                            <th><input type="checkbox" id="checkthis" /></th>
+                                            <td>{{ order.product }}</td>
                                             <td>{{ order.product.category }}</td>
-                                            <td>{{ order.order_quantity }}</td>
+                                            <td>{{ order.product.quantity }}</td>
+                                            <td class=" {% if order.product.quantity < order.order_quantity  %} bg-danger text-white {% endif %}">{{ order.order_quantity }}</td>
+                                            <td>{{ order.staff }}</td>
                                             <td>{{ order.created_at }}</td>
+                                            <td>{% if order.status %} <button type="button" class="btn btn-outline-success disabled">APPROVED</button> {% else %} <button type="button" class="btn btn-outline-danger disabled" >WAITING</button> {% endif %}</td>
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
+                                
                             </tbody>
                         </table>
                     </div>
@@ -57,7 +66,9 @@
                 $(document).ready(function() {
                   $('#staffIndexTable').DataTable({
                     "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-                    "iDisplayLength": 5
+                    "iDisplayLength": 10,
+                    "scrollX": true,
+                    "scrollY": '500px'
                   });
                 });
             </script>
