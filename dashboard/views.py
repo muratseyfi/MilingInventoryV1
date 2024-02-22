@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Product, Order
 from .forms import ProductForm, OrderForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db import connection
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required
 def index(request):
@@ -152,3 +152,33 @@ def order_approve(request, pk):
             cursor.execute("UPDATE dashboard_order SET status=true WHERE id =  %s", [pk])
         return redirect('dashboard-order')
     return render(request, 'dashboard/order_approve.html', context)
+
+
+@login_required
+def order_delete(request, pk):
+    item = Order.objects.get(id=pk)
+    context = {
+        'item':item,
+    }
+    if request.method == 'POST':
+        item.delete()
+        return redirect('dashboard-order')
+    
+    return render(request, 'dashboard/order_delete.html', context)
+
+@login_required
+def order_update(request, pk):
+    item = Order.objects.get(id=pk)
+    if request.method == 'POST':
+        form = OrderForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard-order')
+    else:
+        form = OrderForm(instance=item)
+    context = {
+        'form':form,
+        'item':item
+    }
+    return render(request, 'dashboard/order_update.html', context)
+

@@ -1,9 +1,9 @@
 {% load crispy_forms_tags %}
 <div class="container-fluid">
-    <div class="col-md-10 col-sm-12 mx-auto">
+    <div class="col-md-12 col-sm-12 mx-auto">
         <h3 class="mt-5">My Orders</h3>
         <div class="row mt-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-header">
                         Make Request
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="card">
                     <div class="card-header">
                         Orders Records
@@ -37,6 +37,7 @@
                                     <th scope="col">P.Qty</th>
                                     <th scope="col">O.Qty</th>
                                     <th scope="col">Order by</th>
+                                    <th scope="col">Customer</th>
                                     <th scope="col">Order Date</th>
                                     <th scope="col">Status</th>
                                 </tr>
@@ -51,6 +52,7 @@
                                             <td>{{ order.product.quantity }}</td>
                                             <td class=" {% if order.product.quantity < order.order_quantity  %} bg-danger text-white {% endif %}">{{ order.order_quantity }}</td>
                                             <td>{{ order.staff }}</td>
+                                            <td>{{ order.customer }}</td>
                                             <td>{{ order.created_at }}</td>
                                             <td>{% if order.status %} <button type="button" class="btn btn-outline-success disabled">APPROVED</button> {% else %} <button type="button" class="btn btn-outline-danger disabled" >WAITING</button> {% endif %}</td>
                                         </tr>

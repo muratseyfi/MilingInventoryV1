@@ -9,9 +9,9 @@
 
     <!--Table-->
     <div class="container-fluid">
-        <div class="col-md-10 col-sm-12 mx-auto">
+        <div class="col-md-12 col-sm-12 mx-auto">
             <div class="row my-4">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-header">
                             Make Request
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-9">
                     <div class="border bg-white p-3">
                         <h4>All Orders</h4>
                         <hr>
@@ -43,6 +43,7 @@
                                     <th scope="col">P.Qty</th>
                                     <th scope="col">O.Qy</th>
                                     <th scope="col">Order by</th>
+                                    <th scope="col">Customer</th>
                                     <th scope="col">Order Date</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Activity</th>
@@ -57,12 +58,13 @@
                                     <td>{{ order.product.quantity }}</td>
                                     <td class=" {% if order.product.quantity < order.order_quantity  %} bg-danger text-white {% endif %}">{{ order.order_quantity }}</td>
                                     <td>{{ order.staff }}</td>
+                                    <td>{{ order.customer }}</td>
                                     <td>{{ order.created_at }}</td>
-                                    <td>{% if order.status %} <button type="button" class="btn btn-outline-success disabled">APPROVED</button> {% else %} <button type="button" class="btn btn-outline-danger disabled" >WAITING</button> {% endif %}</td>
+                                    <td>{% if order.status %} <button type="button" class="btn btn-outline-success btn-sm disabled">APPROVED</button> {% else %} <button type="button" class="btn btn-outline-danger btn-sm disabled" >PENDING</button> {% endif %}</td>
                                     <td>
                                         <a class="btn btn-success btn-sm {% if order.status  %} disabled {% endif %}" href="{% url 'dashboard-order-approve' order.id %}">OK</a>
-                                        <a class="btn btn-info btn-sm" href="">Edit</a>
-                                        <a class="btn btn-danger btn-sm" href="">Delete</a>
+                                        <a class="btn btn-info btn-sm" href="{% url 'dashboard-order-update' order.id %}">Edit</a>
+                                        <a class="btn btn-danger btn-sm" href="{% url 'dashboard-order-delete' order.id %}">Delete</a>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -83,6 +85,7 @@
           $('#orderTable').DataTable({
             "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
             "iDisplayLength": 10,
+            "pagingType": 'simple_numbers',
             "scrollX": true,
             "scrollY": '500px'
           });
