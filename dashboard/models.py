@@ -17,6 +17,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, models.CASCADE, null=True)
     quantity = models.PositiveIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    unit_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
     class Meta:
         verbose_name_plural = 'Product'
@@ -52,8 +53,8 @@ class Order(models.Model):
     order_quantity = models.PositiveIntegerField(null=True)
     status = models.BooleanField(default=False)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    #customer = models.CharField(max_length=200, null=True, default='1')
     created_at = models.DateTimeField(auto_now_add=True)
+    discount = models.DecimalField(max_digits=8, decimal_places=2, default=0)
 
     class Meta:
         verbose_name_plural = 'Order'

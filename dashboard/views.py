@@ -5,7 +5,7 @@ from .forms import ProductForm, OrderForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db import connection
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .filters import OrderFilter, ProductFilter
 
 @login_required
 def index(request):
@@ -14,6 +14,14 @@ def index(request):
     orders_count = orders.count()
     products_count = products.count()
     workers_count = User.objects.all().count()
+
+    orderFilter = OrderFilter(request.GET, queryset=orders)
+    orders = orderFilter.qs
+
+    productFilter = ProductFilter(request.GET, queryset=products)
+    products = productFilter.qs
+
+
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -29,7 +37,9 @@ def index(request):
         'products': products,
         'workers_count': workers_count,
         'products_count': products_count,
-        'orders_count': orders_count
+        'orders_count': orders_count,
+        'orderFilter': orderFilter,
+        'productFilter': productFilter
     }
     return render(request, 'dashboard/index.html', context)
 
@@ -67,6 +77,9 @@ def product(request):
     workers_count = User.objects.all().count()
     orders_count = Order.objects.all().count()
 
+    productFilter = ProductFilter(request.GET, queryset=items)
+    items = productFilter.qs
+
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
@@ -82,7 +95,8 @@ def product(request):
         'form': form,
         'workers_count': workers_count,
         'products_count': products_count,
-        'orders_count': orders_count
+        'orders_count': orders_count,
+        'productFilter': productFilter
     }
 
     return render(request, 'dashboard/product.html', context)
@@ -122,6 +136,10 @@ def order(request):
     orders_count = orders.count()
     workers_count = User.objects.all().count()
     products_count = Product.objects.all().count()
+
+    orderFilter = OrderFilter(request.GET, queryset=orders)
+    orders = orderFilter.qs
+
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -136,7 +154,8 @@ def order(request):
         'workers_count': workers_count,
         'orders_count': orders_count,
         'products_count': products_count,
-        'form': form
+        'form': form,
+        'orderFilter': orderFilter
     }
     return render(request, 'dashboard/order.html', context)
 
